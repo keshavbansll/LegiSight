@@ -1,31 +1,57 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Modal buttons and elements
   const uploadBtn = document.querySelector(".btn-upload");
-  const signInModal = document.getElementById("signInModal");
-  const signUpModal = document.getElementById("signUpModal");
-  const uploadModal = document.getElementById("uploadModal");
+  const showSignInHeaderBtn = document.getElementById("showSignInHeader");
   const showSignUpBtn = document.getElementById("showSignUp");
   const showSignInBtn = document.getElementById("showSignIn");
   const closeButtons = document.querySelectorAll(".close-button");
-  const uploadBtn = document.querySelector(".btn-upload");
-  const signInModal = document.getElementById("signInModal");
-  const signUpModal = document.getElementById("signUpModal");
-  const uploadModal = document.getElementById("uploadModal");
-  const showSignUpBtn = document.getElementById("showSignUp");
-  const showSignInBtn = document.getElementById("showSignIn");
-  const showSignInHeaderBtn = document.getElementById("showSignInHeader"); // Add this line
-  const closeButtons = document.querySelectorAll(".close-button");
+  const uploadForm = document.getElementById("uploadForm");
+  const fileInput = document.getElementById("fileInput");
 
-  // Function to show a modal
+  const signInModal = document.getElementById("signInModal");
+  const signUpModal = document.getElementById("signUpModal");
+  const uploadModal = document.getElementById("uploadModal");
+
+  const darkModeToggle = document.querySelector(".dark-mode-toggle");
+
+  // --- Dark Mode Logic ---
+  const applyTheme = (theme) => {
+    document.body.classList.toggle("dark-mode", theme === "dark-mode");
+    if (theme === "dark-mode") {
+      darkModeToggle.classList.remove("fa-moon");
+      darkModeToggle.classList.add("fa-sun");
+    } else {
+      darkModeToggle.classList.remove("fa-sun");
+      darkModeToggle.classList.add("fa-moon");
+    }
+  };
+
+  // Check for saved theme preference
+  const currentTheme = localStorage.getItem("theme");
+  if (currentTheme) {
+    applyTheme(currentTheme);
+  }
+
+  if (darkModeToggle) {
+    darkModeToggle.addEventListener("click", () => {
+      let newTheme = document.body.classList.contains("dark-mode")
+        ? "light-mode"
+        : "dark-mode";
+      applyTheme(newTheme);
+      localStorage.setItem("theme", newTheme);
+    });
+  }
+
+  // --- Modal Functions ---
   const showModal = (modal) => {
     modal.style.display = "flex";
   };
 
-  // Function to hide a modal
   const hideModal = (modal) => {
     modal.style.display = "none";
   };
 
-  // Show upload modal when 'Upload Document' is clicked
+  // Event listeners for modal triggers
   if (uploadBtn) {
     uploadBtn.addEventListener("click", (e) => {
       e.preventDefault();
@@ -33,7 +59,30 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // Handle modal closing
+  if (showSignInHeaderBtn) {
+    showSignInHeaderBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      showModal(signInModal);
+    });
+  }
+
+  if (showSignUpBtn) {
+    showSignUpBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      hideModal(signInModal);
+      showModal(signUpModal);
+    });
+  }
+
+  if (showSignInBtn) {
+    showSignInBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      hideModal(signUpModal);
+      showModal(signInModal);
+    });
+  }
+
+  // Event listeners to close modals
   closeButtons.forEach((button) => {
     button.addEventListener("click", (e) => {
       e.preventDefault();
@@ -43,32 +92,6 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
   });
-
-  // Switch from Sign In to Sign Up
-  if (showSignUpBtn) {
-    showSignUpBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      hideModal(signInModal);
-      showModal(signUpModal);
-    });
-  }
-
-  // Show Sign In modal from header
-  if (showSignInHeaderBtn) {
-    showSignInHeaderBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      showModal(signInModal);
-    });
-  }
-
-  // Switch from Sign Up to Sign In
-  if (showSignInBtn) {
-    showSignInBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      hideModal(signUpModal);
-      showModal(signInModal);
-    });
-  }
 
   // Hide modal if user clicks outside of it
   window.addEventListener("click", (e) => {
@@ -80,32 +103,70 @@ document.addEventListener("DOMContentLoaded", () => {
       hideModal(uploadModal);
     }
   });
+
+  // --- File Type Validation ---
+  if (fileInput) {
+    fileInput.addEventListener("change", () => {
+      const allowedTypes = [
+        "application/pdf",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "text/plain",
+      ];
+      const file = fileInput.files[0];
+      if (file && !allowedTypes.includes(file.type)) {
+        alert(
+          "Invalid file type. Please upload a PDF, DOCX, XLSX, PPTX, or TXT file."
+        );
+        fileInput.value = ""; // Clear the file input
+      }
+    });
+  }
+
+  // --- Upload Form Submission Logic ---
+  if (uploadForm) {
+    uploadForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const formData = new FormData(uploadForm);
+
+      try {
+        const response = await fetch("/upload", {
+          method: "POST",
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert("File uploaded successfully!");
+          hideModal(uploadModal);
+        } else {
+          const result = await response.text();
+          alert("Upload failed: " + result);
+        }
+      } catch (error) {
+        console.error("Error during upload:", error);
+        alert("An error occurred during upload.");
+      }
+    });
+  }
 });
 
-// Function to check if an element is in the viewport
-const isElementInViewport = (el) => {
-  const rect = el.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <=
-      (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-};
+// Animate "Ready to Simplify" section on scroll
+const readyContent = document.querySelector(".ready-content");
 
-// Function to handle the scroll animation
-const handleScrollAnimation = () => {
-  const readySectionContent = document.querySelector(".ready-content");
-  if (readySectionContent) {
-    if (isElementInViewport(readySectionContent)) {
-      readySectionContent.classList.add("is-visible");
-    }
+const observer = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+      }
+    });
+  },
+  {
+    threshold: 0.3, // Trigger when 30% of the element is visible
   }
-};
+);
 
-// Listen for scroll events
-window.addEventListener("scroll", handleScrollAnimation);
-
-// Run the function once on page load in case the element is already in view
-handleScrollAnimation();
+if (readyContent) {
+  observer.observe(readyContent);
+}
