@@ -1,0 +1,25 @@
+{
+  "name": "legisight",
+  "version": "1.0.0",
+  "description": "LegiSight is built to demystify legal documents and empower users whether individuals, businesses, or legal professionals with clear insights, fast summarization, and interactive guidance. It aims to make the law less intimidating and more actionable, all while maintaining global-grade privacy standards from day one.",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/keshavbansll/LegiSight.git"
+  },
+  "keywords": [],
+  "author": "Keshav Bansal",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keshavbansll/LegiSight/issues"
+  },
+  "homepage": "https://github.com/keshavbansll/LegiSight#readme",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "nodemon": "^3.1.10"
+  }
+}
