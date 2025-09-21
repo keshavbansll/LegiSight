@@ -1,0 +1,145 @@
+<!-- pricing.ejs -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pricing Plans - LegiSight AI</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="icon" type="image/png" href="/favicon.png" />
+  </head>
+  <body>
+    <%- include('partials/header') %> <%- include('partials/sidebar') %>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const darkModeToggle = document.querySelector(".dark-mode-toggle");
+
+        // Update toggle icon based on current theme
+        const updateToggleIcon = () => {
+          if (darkModeToggle) {
+            if (document.body.classList.contains("dark-mode")) {
+              darkModeToggle.classList.remove("fa-moon");
+              darkModeToggle.classList.add("fa-sun");
+            } else {
+              darkModeToggle.classList.remove("fa-sun");
+              darkModeToggle.classList.add("fa-moon");
+            }
+          }
+        };
+
+        updateToggleIcon();
+
+        // Dark mode toggle functionality
+        if (darkModeToggle) {
+          darkModeToggle.addEventListener("click", () => {
+            document.body.classList.toggle("dark-mode");
+            let newTheme = document.body.classList.contains("dark-mode")
+              ? "dark-mode"
+              : "light-mode";
+            localStorage.setItem("theme", newTheme);
+            updateToggleIcon();
+          });
+        }
+      });
+    </script>
+
+    <main class="pricing-main">
+      <div class="pricing-container">
+        <div class="pricing-header">
+          <h1>Choose Your Plan</h1>
+          <p>Select the perfect plan for your legal document analysis needs</p>
+        </div>
+
+        <div class="pricing-plans">
+          <!-- Individual Plan -->
+          <div class="pricing-card">
+            <div class="plan-header">
+              <h3>Individual</h3>
+              <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">0</span>
+                <span class="period">/month</span>
+              </div>
+            </div>
+            <div class="plan-features">
+              <ul>
+                <li><i class="fas fa-check"></i> 3 uploads daily</li>
+                <li><i class="fas fa-check"></i> Basic features</li>
+                <li><i class="fas fa-check"></i> History options</li>
+                <li><i class="fas fa-check"></i> Comparison tools</li>
+                <li><i class="fas fa-check"></i> Free forever</li>
+              </ul>
+            </div>
+            <button class="plan-btn">Get Started</button>
+          </div>
+
+          <!-- Enterprise Plan -->
+          <div class="pricing-card featured">
+            <div class="plan-badge">Most Popular</div>
+            <div class="plan-header">
+              <h3>Enterprise</h3>
+              <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">49</span>
+                <span class="period">/month</span>
+              </div>
+            </div>
+            <div class="plan-features">
+              <ul>
+                <li><i class="fas fa-check"></i> 10 daily upload limit</li>
+                <li><i class="fas fa-check"></i> More features</li>
+                <li>
+                  <i class="fas fa-check"></i> Multiple document comparison
+                </li>
+                <li><i class="fas fa-check"></i> Detailed analysis</li>
+                <li><i class="fas fa-check"></i> Industry grade review</li>
+                <li><i class="fas fa-check"></i> 3rd party integrations</li>
+              </ul>
+            </div>
+            <button class="plan-btn">Choose Enterprise</button>
+          </div>
+
+          <!-- Legal Professionals Plan -->
+          <div class="pricing-card">
+            <div class="plan-header">
+              <h3>Legal Professionals</h3>
+              <div class="price">
+                <span class="currency">$</span>
+                <span class="amount">199</span>
+                <span class="period">/month</span>
+              </div>
+            </div>
+            <div class="plan-features">
+              <ul>
+                <li><i class="fas fa-check"></i> Unlimited uploads</li>
+                <li><i class="fas fa-check"></i> Advanced controls</li>
+                <li><i class="fas fa-check"></i> Team collaborations</li>
+                <li><i class="fas fa-check"></i> Role-based access</li>
+                <li>
+                  <i class="fas fa-check"></i> Professional 3rd party tools
+                </li>
+                <li><i class="fas fa-check"></i> Advanced analytics</li>
+              </ul>
+            </div>
+            <button class="plan-btn">Choose Professional</button>
+          </div>
+        </div>
+
+        <div class="pricing-footer">
+          <p>
+            All plans include 24/7 customer support and 30-day money-back
+            guarantee
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <script src="/js/sidebar.js"></script>
+  </body>
+</html>

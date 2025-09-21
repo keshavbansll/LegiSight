@@ -1,0 +1,21 @@
+<!-- header.ejs -->
+
+<header class="header">
+  <div class="header-right" id="header-options">
+    <a href="#" class="privacy-lock-link" title="Privacy protected">
+      <i class="fa-solid fa-lock"></i>
+    </a>
+    <i class="fa-solid fa-moon dark-mode-toggle"></i>
+    <a href="/auth/login" class="btn-sign-in" id="showSignInHeader">Sign In</a>
+  </div>
+</header>
+
+<script>
+  // Apply theme immediately on page load (before DOMContentLoaded)
+  (function () {
+    const currentTheme = localStorage.getItem("theme");
+    if (currentTheme === "dark-mode") {
+      document.body.classList.add("dark-mode");
+    }
+  })();
+</script>
